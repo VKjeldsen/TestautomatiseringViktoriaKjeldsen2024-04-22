@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 public class MyStepdefs {
 
     private WebDriver driver;
-    private WebElement element;
 
     private static void click(WebDriver driver, By by) {
         (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions.elementToBeClickable(by));
@@ -104,18 +103,18 @@ public class MyStepdefs {
         click(driver, By.name("join"));
     }
 
-    @Then("a {string} will show and a new user will {string} registered")
-    public void aWillShowAndANewUserWillRegistered(String text, String status) {
-        if (status.equals("not be")) {
-            if (text.equals("Last Name is required")) {
-                element = driver.findElement(By.cssSelector("#signup_form > div:nth-child(6) > div:nth-child(2) > div > span > span"));
-            } else if (text.equals("Password did not match")) {
-                element = driver.findElement(By.cssSelector("#signup_form > div:nth-child(9) > div > div.row > div:nth-child(2) > div > span > span"));
-            } else if (text.equals("You must confirm that you have read and accepted our Terms and Conditions")) {
-                element = driver.findElement(By.cssSelector("#signup_form > div:nth-child(12) > div > div:nth-child(2) > div:nth-child(1) > span > span"));
-            }
-        } else if (status.equals("be")) {
+    @Then("a {string} will show and the registration process will end")
+    public void aWillShowAndTheRegistrationProcessWillEnd(String text) {
+        WebElement element;
+        if (text.equals("Last Name is required")) {
+            element = driver.findElement(By.cssSelector("#signup_form > div:nth-child(6) > div:nth-child(2) > div > span > span"));
+        } else if (text.equals("Password did not match")) {
+            element = driver.findElement(By.cssSelector("#signup_form > div:nth-child(9) > div > div.row > div:nth-child(2) > div > span > span"));
+        } else if (text.equals("You must confirm that you have read and accepted our Terms and Conditions")) {
+            element = driver.findElement(By.cssSelector("#signup_form > div:nth-child(12) > div > div:nth-child(2) > div:nth-child(1) > span > span"));
+        } else {
             element = driver.findElement(By.cssSelector("body > div > div.page-content-wrapper > div > h2"));
+            //Om allt går igenom --> "THANK YOU FOR CREATING AN ACCOUNT WITH BASKETBALL ENGLAND"
         }
         String actual = element.getText();
         assertEquals(text, actual);
